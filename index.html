@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>전기와 자기 퀴즈</title>
+<title>전기와 자기 161제</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
@@ -162,13 +162,15 @@ const CATS = [
 {id:'magfield',name:'자기장과 자기력선',icon:'🧭'},
 {id:'currentmag',name:'전류에 의한 자기장',icon:'🌀'},
 {id:'electromagnet',name:'전자석',icon:'🔧'},
-{id:'motorforce',name:'전류가 받는 힘·전동기·스피커',icon:'🎧'}
+{id:'motorforce',name:'전류가 받는 힘·전동기·스피커',icon:'🎧'},
+{id:'oxreason', name:'OX 함정문장 찾기', icon:'🎯'}
 ];
 
 function M(c,q,o,a,e,img){return {c,t:'mcq',q,o,a,e,img:img||null};}
 /* 블록 터치형 문제(철자/기호를 순서대로 눌러서 완성하는 방식).
    answer: 정답 문자열(예: 'He'), blocks: 화면에 흩어놓을 글자 타일 배열(정답 글자 + 헷갈리는 글자 섞어서). */
 function B(c,q,answer,blocks,e){return {c,t:'blocks',q,answer,blocks,e};}
+function OX(c,q,isTrue,reasons,ra,e){return {c,t:'ox2',q,isTrue,reasons:reasons||[],ra:(ra===undefined?null:ra),e};}
 
 const QUESTIONS = [
 M('friction',"마찰 전기에 대한 설명으로 옳은 것은?",["같은 종류의 두 물체를 마찰할 때 발생하는 전기이다", "종류가 다른 두 물체가 마찰하여 발생하는 전기이다", "마찰할 때 새로운 전자가 만들어져서 생기는 전기이다", "항상 두 물체 모두 (+)전하로 대전된다"],1,"마찰 전기는 종류가 다른 두 물체가 마찰하여 발생하는 전기이다. 마찰할 때 전자가 새로 만들어지는 것이 아니라, 원래 있던 전자가 한 물체에서 다른 물체로 이동한다.",null),
@@ -300,7 +302,94 @@ M('motorforce',"전동기에서 정류자의 역할로 가장 옳은 것은?",["
 M('motorforce',"전동기의 회전 원리에 대한 설명으로 가장 옳은 것은?",["자석 사이에 있는 코일에 전류가 흐를 때, 코일에 흐르는 전류의 방향이 주기적으로 바뀌면서 코일이 자석으로부터 힘을 받아 계속 회전한다", "전동기는 코일에 열이 발생하는 힘으로 회전한다", "전동기는 자석들끼리 부딪치는 힘으로 회전한다", "전동기는 코일이 전기 에너지를 소리 에너지로 전환하며 회전한다"],0,"전동기는 자석의 N극과 S극 사이에 있는 코일에 전류가 흐를 때, 코일에 흐르는 전류의 방향이 정류자에 의해 주기적으로 바뀌면서 코일이 자석으로부터 힘을 받아 계속 회전하는 원리로 작동한다.",null),
 M('motorforce',"전동기를 이용한 예로 가장 거리가 먼 것은?",["세탁기", "선풍기", "전기 주전자", "전기 자동차"],2,"전기 주전자는 전기 에너지를 주로 열에너지로 전환하는 기구이다. 세탁기, 선풍기, 전기 자동차는 모두 전동기(모터)의 회전력을 이용하는 기구이다.",null),
 M('motorforce',"스피커의 구조와 원리에 대한 설명으로 가장 옳은 것은?",["고정된 자석과 진동판에 연결된 코일로 이루어져 있으며, 코일에 흐르는 전류의 방향이 바뀌면 코일이 받는 힘의 방향이 바뀌어 진동판을 진동시켜 소리가 난다", "스피커는 정류자를 이용하여 소리를 낸다", "스피커 내부에는 자석이 들어 있지 않다", "스피커는 정전기 유도만을 이용하여 소리를 낸다"],0,"스피커 내부에는 고정된 자석과 진동판에 연결된 코일이 있다. 코일에 흐르는 전류의 방향이 바뀌면 코일이 받는 힘의 방향이 바뀌면서 코일이 앞뒤로 흔들리고, 이 진동이 진동판을 진동시켜 소리가 난다.","speaker"),
-M('motorforce',"말굽자석 사이에 놓인 도선에 전류가 흐를 때, 도선이 받는 힘의 방향을 찾는 방법으로 옳은 것은?",["오른손의 엄지손가락을 전류의 방향, 나머지 네 손가락을 자기장의 방향(N극→S극)으로 향할 때 손바닥이 향하는 방향이 힘의 방향이다", "왼손의 엄지손가락을 힘의 방향으로 놓고 자기장의 방향을 구한다", "전류의 방향과 자기장의 방향이 같은 방향이면 힘의 방향도 같다", "도선이 받는 힘의 방향은 항상 자기장의 반대 방향이다"],0,"오른손의 엄지손가락을 전류의 방향으로, 나머지 네 손가락을 자기장의 방향(N극→S극)으로 향하게 폈을 때, 도선은 손바닥이 향하는 방향으로 힘을 받는다.",null)
+M('motorforce',"말굽자석 사이에 놓인 도선에 전류가 흐를 때, 도선이 받는 힘의 방향을 찾는 방법으로 옳은 것은?",["오른손의 엄지손가락을 전류의 방향, 나머지 네 손가락을 자기장의 방향(N극→S극)으로 향할 때 손바닥이 향하는 방향이 힘의 방향이다", "왼손의 엄지손가락을 힘의 방향으로 놓고 자기장의 방향을 구한다", "전류의 방향과 자기장의 방향이 같은 방향이면 힘의 방향도 같다", "도선이 받는 힘의 방향은 항상 자기장의 반대 방향이다"],0,"오른손의 엄지손가락을 전류의 방향으로, 나머지 네 손가락을 자기장의 방향(N극→S극)으로 향하게 폈을 때, 도선은 손바닥이 향하는 방향으로 힘을 받는다.",null),
+OX("oxreason","마찰 전기는 두 물체를 마찰할 때 새로운 전자가 생성되어 발생한다.",false,
+  ["마찰 시 전자가 새로 생기는 것이 아니라 한 물체에서 다른 물체로 전자가 이동하기 때문","마찰 전기는 전자가 아니라 원자핵이 이동하여 생기기 때문","마찰 전기는 같은 종류의 물체를 마찰할 때만 생기기 때문"],
+  0,"마찰 전기는 서로 다른 두 물체를 마찰할 때, 한 물체에서 다른 물체로 전자가 이동하여 두 물체가 서로 다른 전하로 대전되는 현상이에요. 이때 원자핵은 이동하지 않고 전자만 이동해요."),
+OX("oxreason","마찰 전기는 서로 다른 두 물체를 마찰할 때 한 물체에서 다른 물체로 전자가 이동하여 발생한다.",true,
+  [],null,"맞아요! 마찰 시 전자를 잃은 물체는 (+)전하로, 전자를 얻은 물체는 (-)전하로 대전돼요."),
+OX("oxreason","같은 종류의 전하를 띠는 두 물체 사이에는 서로 끌어당기는 힘이 작용한다.",false,
+  ["전하 사이에는 항상 인력만 작용하기 때문","같은 종류의 전하 사이에는 서로 밀어내는 힘(척력)이 작용하기 때문","같은 종류의 전하 사이에는 아무 힘도 작용하지 않기 때문"],
+  1,"같은 종류의 전하 사이에는 서로 미는 힘인 척력이, 다른 종류의 전하 사이에는 서로 끌어당기는 힘인 인력이 작용해요."),
+OX("oxreason","서로 다른 두 물체를 마찰하여 각각 대전되었을 때, 두 물체 사이에는 서로 밀어내는 힘이 작용한다.",false,
+  ["마찰 후 두 물체는 항상 중성이 되어 전기력이 작용하지 않기 때문","마찰 후 두 물체는 같은 종류의 전하를 띠어서 척력이 작용하기 때문","마찰 후 두 물체는 서로 다른 종류의 전하를 띠므로 끌어당기는 힘(인력)이 작용하기 때문"],
+  2,"서로 다른 두 물체를 마찰하면 한 물체에서 다른 물체로 전자가 이동해 서로 다른 종류의 전하로 대전돼요. 서로 다른 전하 사이에는 인력이 작용하므로 두 물체는 서로 끌어당겨요."),
+OX("oxreason","(-)전하를 띤 대전체를 금속 막대에 가까이 하면, 대전체와 가까운 쪽에는 (-)전하가, 먼 쪽에는 (+)전하가 유도된다.",false,
+  ["대전체와 같은 종류인 (-)전하는 대전체로부터 척력을 받아 먼 쪽으로 밀려나므로, 가까운 쪽에는 (+)전하가 유도되기 때문","금속 막대 내부의 전자는 대전체와 상관없이 무작위로 이동하기 때문","금속 막대는 원래 대전되어 있어 정전기 유도가 일어나지 않기 때문"],
+  0,"(-)대전체를 금속 막대에 가까이 하면, 금속 내부의 자유전자가 대전체로부터 척력을 받아 먼 쪽으로 밀려나요. 그 결과 대전체와 가까운 쪽은 (+)전하, 먼 쪽은 (-)전하로 대전돼요. 이것이 정전기 유도예요."),
+OX("oxreason","정전기 유도가 일어날 때 금속 내부에서 이동하는 입자는 전자가 아니라 원자핵이다.",false,
+  ["정전기 유도가 일어날 때는 원자핵과 전자가 함께 이동하기 때문","금속 내부에서는 원자핵이 아니라 자유전자만 이동하기 때문","정전기 유도는 입자의 이동 없이 전하가 새로 만들어지는 현상이기 때문"],
+  1,"정전기 유도가 일어날 때 원자핵은 이동하지 않아요. 금속 내부의 자유전자만 대전체와의 인력 또는 척력에 의해 이동하면서 금속의 양 끝이 서로 다른 전하로 대전돼요."),
+OX("oxreason","검전기에 (-)전하를 띤 대전체를 금속판에 가까이 하면 금속판은 (-)전하로, 금속박은 (+)전하로 대전된다.",false,
+  ["대전체를 가까이 하면 검전기 내부의 전자는 이동하지 않기 때문","검전기의 금속박은 항상 중성을 유지하기 때문","금속판의 전자가 척력으로 인해 금속박 쪽으로 이동해 금속판은 (+)전하, 금속박은 (-)전하를 띠기 때문"],
+  2,"(-)전하를 띠는 대전체를 금속판에 가까이 하면 검전기 내부의 전자가 척력으로 인해 금속판에서 금속박 쪽으로 이동해요. 그 결과 금속판은 (+)전하를, 금속박은 (-)전하를 띠게 돼요."),
+OX("oxreason","검전기의 두 금속박은 같은 종류의 전하를 띠므로 척력이 작용해 벌어진다.",true,
+  [],null,"맞아요! 정전기 유도로 두 금속박이 같은 전하를 띠게 되면 서로 밀어내는 척력 때문에 벌어져요. 이 벌어지는 정도로 대전체의 대전량을 짐작할 수 있어요."),
+OX("oxreason","금속 막대의 전자가 A에서 B로 이동하면, A에는 (-)전하가 유도되고 B에는 (+)전하가 유도된다.",false,
+  ["전자를 잃은 A는 (+)전하, 전자를 얻은 B는 (-)전하로 대전되기 때문","전자가 이동해도 금속 막대의 양 끝은 전하를 띠지 않기 때문","전자가 이동하면 A와 B 모두 (-)전하로 대전되기 때문"],
+  0,"금속 막대에서 전자가 A에서 B로 이동하면, 전자를 잃은 A쪽은 (+)전하로, 전자를 얻은 B쪽은 (-)전하로 대전돼요."),
+OX("oxreason","금속 막대의 B부분과 가까이 있는 고무풍선은 B부분과 같은 종류의 전하를 띠므로 서로 밀어낸다.",false,
+  ["고무풍선은 대전되지 않아 아무 힘도 받지 않기 때문","고무풍선과 B부분은 서로 다른 종류의 전하를 띠어 끌어당기는 힘이 작용하기 때문","고무풍선과 B부분은 같은 종류의 전하를 띠지만 거리가 멀어 힘이 작용하지 않기 때문"],
+  1,"고무풍선과 금속 막대의 B부분은 서로 다른 종류의 전하를 띠기 때문에 서로 끌어당기는 인력이 작용해서 고무풍선이 끌려와요."),
+OX("oxreason","옴의 법칙에 따르면 전압이 일정할 때 전류의 세기는 저항의 크기에 비례한다.",false,
+  ["전압이 일정할 때 전류는 저항과 관계없이 항상 일정하기 때문","전압이 일정할 때 전류의 세기는 저항의 제곱에 비례하기 때문","전압이 일정할 때 전류의 세기는 저항의 크기에 반비례하기 때문"],
+  2,"옴의 법칙(V=IR)에 따르면 전압이 일정할 때 전류의 세기는 저항의 크기에 반비례해요. 저항이 클수록 전류는 작아져요."),
+OX("oxreason","전기 저항의 단위 옴(Ω)에서 1Ω은 1A의 전압을 걸었을 때 1V의 전류가 흐르는 도선의 저항이다.",false,
+  ["1Ω은 1V의 전압을 걸었을 때 1A의 전류가 흐르는 도선의 저항이기 때문","1Ω은 전류의 세기와 관계없이 항상 일정한 값이기 때문","1Ω은 1W의 전력을 소비하는 도선의 저항을 의미하기 때문"],
+  0,"저항의 단위 옴(Ω)에서 1Ω은 1V의 전압을 걸었을 때 1A의 전류가 흐르는 도선의 저항을 말해요."),
+OX("oxreason","전기 저항은 전류가 흐르는 것을 방해하는 정도를 나타내며, 전자가 이동하면서 원자와 충돌하기 때문에 생긴다.",true,
+  [],null,"맞아요! 전기 저항은 전류가 흐르는 것을 방해하는 정도이고, 전자가 이동하면서 원자와 충돌하기 때문에 생겨요. 물질마다 원자 배열이 달라 저항의 크기도 달라요."),
+OX("oxreason","도체는 전류가 잘 흐르지 않는 물질이고, 부도체는 전류가 잘 흐르는 물질이다.",false,
+  ["도체와 부도체는 온도에 따라 전류가 흐르는 정도가 바뀔 뿐 차이가 없기 때문","도체는 자유전자가 많아 전류가 잘 흐르고, 부도체는 자유전자가 거의 없어 전류가 잘 흐르지 않기 때문","도체는 전자를 가지고 있지 않아 전류가 흐르지 않기 때문"],
+  1,"도체는 자유전자가 많아 전류가 잘 흐르는 물질(예: 금속)이고, 부도체는 자유전자가 거의 없어 전류가 잘 흐르지 않는 물질(예: 유리, 고무)이에요."),
+OX("oxreason","저항을 직렬로 연결하면 전체 저항은 작아진다.",false,
+  ["저항을 직렬로 연결하면 전체 저항은 변하지 않기 때문","저항을 직렬로 연결하면 전류가 흐르는 통로가 여러 개로 늘어나기 때문","저항을 직렬로 연결하면 저항의 길이가 길어지는 효과가 있어 전체 저항이 커지기 때문"],
+  2,"저항을 직렬로 연결하면 마치 저항의 길이가 길어진 것과 같은 효과가 있어 전체 저항이 커져요."),
+OX("oxreason","저항을 직렬로 연결한 회로에서 전구 한 개가 끊어지면 나머지 전구는 정상적으로 켜져 있다.",false,
+  ["직렬연결은 전류가 흐를 수 있는 길이 하나뿐이라 전구 하나가 끊어지면 회로 전체에 전류가 흐르지 않아 나머지 전구도 꺼지기 때문","직렬연결에서는 전구가 끊어져도 전류가 다른 길로 우회하기 때문","직렬연결에서는 전구가 끊어지면 오히려 나머지 전구가 더 밝아지기 때문"],
+  0,"직렬연결에서는 전류가 흐를 수 있는 길이 하나뿐이므로, 전구 하나의 연결이 끊어지면 회로 전체에 전류가 흐르지 않아 나머지 전구도 함께 꺼져요."),
+OX("oxreason","저항을 병렬로 연결하면 전체 저항은 각 저항보다 커진다.",false,
+  ["병렬연결에서는 저항의 크기가 서로 상쇄되어 전체 저항이 항상 0이 되기 때문","병렬연결은 전류가 흐를 수 있는 통로(단면적)가 늘어난 것과 같은 효과가 있어 전체 저항이 오히려 작아지기 때문","병렬연결에서는 저항의 길이가 길어지는 효과가 있어 전체 저항이 커지기 때문"],
+  1,"저항을 병렬로 연결하면 전류가 흐를 수 있는 통로(단면적)가 늘어난 것과 같은 효과가 있어 전체 저항은 오히려 각 저항보다 작아져요."),
+OX("oxreason","저항을 병렬로 연결하면 각 저항에는 전체 전압과 같은 크기의 전압이 걸린다.",true,
+  [],null,"맞아요! 병렬연결에서는 각 저항(전구)에 걸리는 전압이 전원의 전체 전압과 같아요. 그래서 전구 한 개를 연결했을 때와 밝기가 같아요."),
+OX("oxreason","가정의 전기 배선은 직렬로 연결되어 있어, 전기 기구 하나의 스위치를 끄면 다른 기구도 모두 꺼진다.",false,
+  ["가정의 전기 배선은 직렬연결이지만 각 기구마다 별도의 퓨즈가 있어 꺼지지 않기 때문","가정의 전기 배선은 전류가 흐르지 않도록 절연되어 있어 어떤 기구도 켜지지 않기 때문","가정의 전기 배선은 병렬로 연결되어 있어 각 기구를 따로 켜고 끌 수 있기 때문"],
+  2,"가정의 전기 배선은 병렬로 연결되어 있어요. 그래서 각 전기 기구에 같은 전압이 걸리고, 하나의 기구를 꺼도 다른 기구는 영향을 받지 않아요."),
+OX("oxreason","선풍기는 전기 에너지를 주로 열에너지로 전환하는 기구이다.",false,
+  ["선풍기는 전동기를 이용해 전기 에너지를 주로 운동 에너지로 전환하는 기구이기 때문","선풍기는 전기 에너지를 전혀 전환하지 않고 그대로 사용하기 때문","선풍기는 전기 에너지를 빛에너지로 전환하는 기구이기 때문"],
+  0,"선풍기는 전동기(모터)를 이용해 전기 에너지를 주로 운동 에너지로 전환하는 기구예요. 전기 에너지를 열에너지로 주로 전환하는 기구는 전기다리미 같은 것이에요."),
+OX("oxreason","소비 전력은 1초 동안 사용하는 전기 에너지의 양을 의미하며, 단위로 W(와트)를 사용한다.",true,
+  [],null,"맞아요! 소비 전력은 1초 동안 사용하는 전기 에너지의 양이고, 단위는 W(와트) 또는 kW(킬로와트)를 사용해요."),
+OX("oxreason","자기장의 방향은 자석의 S극에서 나와 N극으로 들어가는 방향이다.",false,
+  ["자기장은 방향이 없는 물리량이기 때문","자기장의 방향은 자석의 N극에서 나와 S극으로 들어가는 방향이기 때문","자기장의 방향은 자석의 극과 관계없이 항상 지구 자기장의 방향과 같기 때문"],
+  1,"자기장의 방향은 자석의 N극에서 나와 S극으로 들어가는 방향으로 정해요. 나침반 자침의 N극이 가리키는 방향이 바로 그 지점에서의 자기장의 방향이에요."),
+OX("oxreason","자기력선의 간격이 촘촘할수록 그 지점의 자기장의 세기는 약하다.",false,
+  ["자기력선의 간격은 자기장의 세기와 관계가 없기 때문","자기력선의 간격이 촘촘할수록 자석의 극에서 멀리 떨어져 있기 때문","자기력선의 간격이 촘촘할수록 자기장의 세기가 강하기 때문"],
+  2,"자기력선의 간격이 촘촘할수록 그 지점의 자기장의 세기는 강해요. 자석의 극에 가까울수록 자기력선의 간격이 촘촘해지고 자기장도 세져요."),
+OX("oxreason","직선 도선 주위에 생기는 자기장의 방향은 왼손의 네 손가락을 전류의 방향으로 감아쥘 때 엄지손가락이 가리키는 방향이다.",false,
+  ["오른손의 엄지손가락을 전류의 방향으로 향하게 하고 나머지 네 손가락으로 도선을 감아쥘 때, 네 손가락이 가리키는 방향이 자기장의 방향이기 때문","직선 도선 주위에는 자기장이 생기지 않기 때문","왼손이든 오른손이든 상관없이 손가락으로 도선을 감아쥐면 항상 같은 방향의 자기장이 나오기 때문"],
+  0,"직선 도선 주위의 자기장 방향은 오른손의 엄지손가락을 전류의 방향으로 향하게 하고, 나머지 네 손가락으로 도선을 감아쥘 때 네 손가락이 가리키는 방향이에요."),
+OX("oxreason","코일에 흐르는 전류의 세기를 세게 하면 코일 주위에 생기는 자기장의 세기는 오히려 약해진다.",false,
+  ["전류의 세기는 자기장의 세기와 관계가 없기 때문","코일에 흐르는 전류가 셀수록, 코일을 촘촘히 감을수록 자기장의 세기가 강해지기 때문","전류의 세기를 세게 하면 자기장의 방향만 바뀌고 세기는 변하지 않기 때문"],
+  1,"코일 주위에 생기는 자기장의 세기는 전류가 셀수록, 코일을 촘촘하게 감을수록 강해져요."),
+OX("oxreason","전류가 흐르는 방향이 반대로 바뀌면 코일 주위에 생기는 자기장의 방향도 반대로 바뀐다.",true,
+  [],null,"맞아요! 전류의 방향이 바뀌면 그에 따라 만들어지는 자기장의 방향도 반대로 바뀌어요."),
+OX("oxreason","전자석은 전류가 흐르지 않을 때도 계속 자석의 성질을 나타낸다.",false,
+  ["전자석은 영구자석이므로 전류와 관계없이 항상 자석의 성질을 갖기 때문","전자석은 전류의 세기와 관계없이 자석의 세기가 일정하기 때문","전자석은 코일에 전류가 흐르는 동안에만 자석의 성질을 나타내고, 전류가 흐르지 않으면 자석의 성질을 잃기 때문"],
+  2,"전자석은 코일에 전류가 흐르는 동안에만 자석의 성질을 나타내요. 전류가 흐르지 않으면 자석의 성질이 사라져요."),
+OX("oxreason","전자석의 세기를 세게 하려면 코일을 느슨하게 감거나 전류의 세기를 약하게 해야 한다.",false,
+  ["전자석의 세기는 코일을 촘촘히 감을수록, 전류의 세기가 셀수록 강해지기 때문","전자석의 세기는 코일을 감는 방식과 관계없이 항상 일정하기 때문","전자석의 세기는 전류의 세기와 무관하게 코일의 색깔에 따라 달라지기 때문"],
+  0,"전자석의 세기를 세게 하려면 코일을 촘촘하게 감거나 전류의 세기를 크게 해야 해요."),
+OX("oxreason","전동기에서 정류자는 코일에 흐르는 전류의 세기를 조절하는 장치이다.",false,
+  ["정류자는 전류가 흐르지 못하게 완전히 차단하는 장치이기 때문","정류자는 회전축이 반 바퀴 돌 때마다 코일에 흐르는 전류의 방향을 바꾸어 코일이 계속 같은 방향으로 회전하게 하는 장치이기 때문","정류자는 자석의 극을 주기적으로 바꾸는 장치이기 때문"],
+  1,"정류자는 회전축이 반 바퀴 돌 때마다 코일에 흐르는 전류의 방향을 바꾸어 주어, 코일이 계속 같은 방향으로 회전할 수 있게 해 주는 장치예요."),
+OX("oxreason","자기장 속에서 전류가 흐르는 도선이 받는 힘의 방향은 항상 전류의 방향과 나란하다.",false,
+  ["자기장 속의 도선은 전류가 흘러도 힘을 받지 않기 때문","힘의 방향은 자기장의 방향과만 나란하고 전류의 방향과는 무관하기 때문","힘의 방향은 전류의 방향, 자기장의 방향에 각각 수직인 방향이기 때문"],
+  2,"자기장 속에서 전류가 흐르는 도선이 받는 힘의 방향은 전류의 방향, 자기장의 방향에 각각 수직인 방향이에요. 오른손의 엄지손가락을 전류 방향, 네 손가락을 자기장 방향(N→S)으로 향하게 할 때 손바닥이 향하는 방향이 힘의 방향이에요."),
+OX("oxreason","스피커는 정류자를 이용해 코일에 흐르는 전류의 방향을 바꾸어 소리를 낸다.",false,
+  ["스피커에는 정류자가 없으며, 외부에서 공급되는 전류(음성 신호)의 방향이 주기적으로 바뀌면서 코일이 진동해 소리를 내기 때문","스피커는 정류자를 이용해 전류의 세기를 일정하게 유지하기 때문","스피커는 자석 없이 코일만으로 소리를 내는 장치이기 때문"],
+  0,"스피커는 정류자를 사용하지 않아요. 고정된 자석과 진동판에 연결된 코일로 이루어져 있고, 코일에 흐르는 전류의 방향이 바뀌면 코일이 받는 힘의 방향이 바뀌어 진동판을 진동시켜 소리를 내요.")
 ];
 
 /* ============ APP CONFIG ============ */
@@ -350,7 +439,7 @@ async function getStudentPassword(){ const c=await getLoginConfig(); return c.pa
 function newSession(){
   return {name:localStorage.getItem('lastname_'+APP_KEY)||'',cats:[],order:'seq',mode:'full',wrongScope:'all',randomCount:0,
     list:[],idx:0,correct:0,answers:{},wrong:[],combo:0,maxCombo:0,
-    setSize:20,setIdx:0,selected:null,blockPicks:[],submitted:false,giveUp:false,
+    setSize:20,setIdx:0,selected:null,blockPicks:[],submitted:false,giveUp:false,ox2Stage:1,
     lockUntil:0,lockTimerId:null,gsSessionId:null,timeLeft:60,timerId:null};
 }
 let state=newSession();
@@ -481,7 +570,7 @@ function seededShuffleIdx(n,seed){const idx=Array.from({length:n},(_,i)=>i);let 
   return idx;}
 QUESTIONS.forEach((q,i)=>{
   q._id='q'+i;
-  if(q.t==='blocks') return;
+  if(q.t==='blocks' || q.t==='ox2') return;
   const order=seededShuffleIdx(q.o.length, strHash(q._id+'|'+q.q));
   q.o=order.map(k=>q.o[k]);
   q.a=order.indexOf(q.a);
@@ -564,7 +653,7 @@ function renderLogin(){
   <div class="hero">
     <div class="eyebrow">중2 과학 7단원</div>
     <h1>전기와 자기</h1>
-    <p>정전기부터 전동기까지, ${QUESTIONS.length}제로 완전정복!</p>
+    <p>정전기부터 OX 함정문장까지, ${QUESTIONS.length}제로 완전정복!</p>
   </div>
   <div class="card">
     <label class="field-label">🙋 이름(아이디)을 입력해줘</label>
@@ -624,7 +713,7 @@ function renderSetup(){
   <div class="hero">
     <div class="eyebrow">중2 과학 7단원</div>
     <h1>전기와 자기</h1>
-    <p>정전기부터 전동기까지, ${QUESTIONS.length}제로 완전정복!</p>
+    <p>정전기부터 OX 함정문장까지, ${QUESTIONS.length}제로 완전정복!</p>
   </div>
   <div class="card">
     <label class="field-label">👋 ${state.name}님, 반가워요!</label>
@@ -789,7 +878,7 @@ function beginList(list){
   clearResumeSnapshot(state.name);
   state.list=list;
   state.idx=0;state.correct=0;state.wrong=[];state.answers={};
-  state.setIdx=0;state.selected=null;state.blockPicks=[];state.submitted=false;state.giveUp=false;
+  state.setIdx=0;state.selected=null;state.blockPicks=[];state.submitted=false;state.giveUp=false;state.ox2Stage=1;
   state.gsSessionId=uid();
   screen='quiz';
   render();
@@ -830,6 +919,37 @@ function renderBlocksUI(q,isLocked){
   `;
 }
 
+function renderOX2UI(q,isLocked){
+  if(state.ox2Stage===2){
+    return q.reasons.map((r,i)=>{
+      let cls='choice';
+      if(state.submitted){
+        if(i===q.ra) cls+=' correct';
+        else if(i===state.selected) cls+=' wrong';
+      } else if(isLocked){
+        cls+=' locked';
+      } else if(state.selected===i){
+        cls+=' sel';
+      }
+      return `<div class="${cls}" data-idx="${i}">${['①','②','③'][i]} ${r}</div>`;
+    }).join('');
+  }
+  const labels=['⭕ 맞는 문장이에요','❌ 틀린 문장이에요'];
+  const correctIdx=q.isTrue?0:1;
+  return labels.map((label,i)=>{
+    let cls='choice';
+    if(state.submitted){
+      if(i===correctIdx) cls+=' correct';
+      else if(i===state.selected) cls+=' wrong';
+    } else if(isLocked){
+      cls+=' locked';
+    } else if(state.selected===i){
+      cls+=' sel';
+    }
+    return `<div class="${cls}" data-idx="${i}">${label}</div>`;
+  }).join('');
+}
+
 function renderQuiz(){
   const q=currentQ();
   if(!q) return renderResult();
@@ -838,7 +958,8 @@ function renderQuiz(){
   const submittedInfo=state.submitted?state.lastResult:null;
   const isLocked=state.mode==='deep' && !state.submitted && Date.now()<state.lockUntil;
   const isBlocks=q.t==='blocks';
-  const choicesHtml=isBlocks ? renderBlocksUI(q,isLocked) : q.o.map((opt,i)=>{
+  const isOX2=q.t==='ox2';
+  const choicesHtml=isBlocks ? renderBlocksUI(q,isLocked) : isOX2 ? renderOX2UI(q,isLocked) : q.o.map((opt,i)=>{
     let cls='choice';
     if(state.submitted){
       if(i===q.a) cls+=' correct';
@@ -855,6 +976,7 @@ function renderQuiz(){
     const ok=submittedInfo.ok;
     feedback=`<div class="explain-box ${ok?'right':''}"><b>${ok?'정답이에요! 🎉':'아쉬워요! 다시 확인해볼까요?'}</b>${q.e}</div>`;
   }
+  const ox2StageTag=isOX2 ? (state.ox2Stage===2 ? '<div class="tag" style="background:#fdeceb;color:#c0392b;">2단계 · 이 문장이 틀린 진짜 이유는?</div>' : '<div class="tag">1단계 · 이 문장, 맞을까요 틀릴까요?</div>') : '';
   return `
   <div class="card">
     <div class="tag">${catName(q.c)}</div>
@@ -865,6 +987,7 @@ function renderQuiz(){
     ${(state.combo||0)>=2?`<div class="combo-badge">🔥 ${state.combo}연속 정답!</div>`:''}
     <div class="qtext">Q${state.idx+1}. ${q.q}</div>
     ${q.img && IMG[q.img] ? `<img class="qimg" src="${IMG[q.img]}" alt="참고 그림">` : ''}
+    ${ox2StageTag}
     <div id="choicesWrap">${choicesHtml}</div>
     ${feedback}
     ${state.submitted?
@@ -920,6 +1043,14 @@ function autoSubmitTimeout(){ if(!state.submitted){handleSubmit(true);} }
 function handleSubmit(timeout){
   clearInterval(state.timerId);
   const q=currentQ();
+  if(q.t==='ox2' && state.ox2Stage===1 && !(timeout && state.selected==null)){
+    const pick=state.selected===0?'O':'X';
+    if(!q.isTrue && pick==='X'){
+      state.ox2Stage=2; state.selected=null;
+      render();
+      return;
+    }
+  }
   let ok=false;
   let yourAnswerText='(제출 안함)';
   let correctAnswerText;
@@ -928,6 +1059,31 @@ function handleSubmit(timeout){
     ok = !timeout && typed===q.answer;
     yourAnswerText = typed || '(제출 안함)';
     correctAnswerText = q.answer;
+  } else if(q.t==='ox2'){
+    const correctFirstText = q.isTrue ? '⭕ 맞는 문장' : ('❌ 틀린 문장 · '+q.reasons[q.ra]);
+    if(state.ox2Stage===1){
+      if(timeout && state.selected==null){
+        ok=false; yourAnswerText='(제출 안함)';
+      } else {
+        const pick=state.selected===0?'O':'X';
+        if(q.isTrue){
+          ok = pick==='O';
+          yourAnswerText = pick==='O' ? '⭕ 맞는 문장' : '❌ 틀린 문장';
+        } else {
+          ok=false;
+          yourAnswerText='⭕ 맞는 문장';
+        }
+      }
+      correctAnswerText = correctFirstText;
+    } else {
+      if(timeout && state.selected==null){
+        ok=false; yourAnswerText='(이유 선택 안함)';
+      } else {
+        ok = state.selected===q.ra;
+        yourAnswerText = state.selected!=null ? ('❌ 틀린 문장 · '+q.reasons[state.selected]) : '(이유 선택 안함)';
+      }
+      correctAnswerText = correctFirstText;
+    }
   } else {
     if(timeout && state.selected==null){ ok=false; }
     else { ok=state.selected===q.a; }
@@ -953,7 +1109,7 @@ function handleSubmit(timeout){
 
 function goNext(){
   state.idx++;
-  state.selected=null;state.blockPicks=[];state.submitted=false;
+  state.selected=null;state.blockPicks=[];state.submitted=false;state.ox2Stage=1;
   if(state.idx>=state.list.length){ finishQuiz(); return; }
   if(state.mode==='focus' && state.idx>0 && state.idx%state.setSize===0){
     screen='setresult';render();return;
